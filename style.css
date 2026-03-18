@@ -120,6 +120,8 @@ body.page1 {
     min-height: 100vh;
     position: relative;
     overflow: hidden;
+    transition: background-color 250ms ease;
+    z-index: 0;
 }
 
 body.page1 h1,
@@ -133,6 +135,39 @@ body.page1 a {
     text-decoration: underline;
 }
 
+body.page1.stars-off {
+    background-color: #ffd1dc; /* light pink */
+}
+
+body.page1.stars-off h1,
+body.page1.stars-off p,
+body.page1.stars-off a {
+    color: #1a1a1a;
+    text-shadow: none;
+}
+
+/* Background color toggle (used on page2) */
+body.page1.pink-bg {
+    background-color: #ffd1dc; /* light pink */
+}
+
+body.page1.pink-bg h1,
+body.page1.pink-bg p,
+body.page1.pink-bg a {
+    color: #1a1a1a;
+    text-shadow: none;
+}
+
+/* Pink background overlay (toggled on page2) */
+.pink-bg-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: #ffd1dc;
+    z-index: 0;
+    display: none;
+    pointer-events: none;
+}
+
 /* Random star tile layer (rendered by JS) */
 .page1-tile-layer {
     position: fixed;
@@ -142,9 +177,17 @@ body.page1 a {
     overflow: hidden;
 }
 
-body.page1 > :not(#page1-tile-layer) {
+body.page1 > :not(#page1-tile-layer):not(#pink-bg-overlay) {
     position: relative;
     z-index: 1;
+}
+
+.page1-tile-layer {
+    transition: opacity 200ms ease;
+}
+
+body.page1.stars-off #page1-tile-layer {
+    opacity: 0;
 }
 
 .page1-tile {
@@ -153,4 +196,23 @@ body.page1 > :not(#page1-tile-layer) {
     background-repeat: no-repeat;
     background-size: contain;
     pointer-events: none;
+}
+
+/* Stars toggle button (used on page2.html) */
+.stars-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.stars-toggle:hover {
+    background: rgba(0, 0, 0, 0.4);
 }

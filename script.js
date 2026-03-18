@@ -146,4 +146,31 @@ $(document).ready(function(){
             renderPage1Tiles();
         });
     }
+
+    // Page2: change only the background color (stars should keep animating).
+    if ($("body.page2").length) {
+        var $btn = $("#toggle-stars");
+        var $pinkOverlay = $("#pink-bg-overlay");
+
+        function syncToggleUI() {
+            var on = $pinkOverlay.is(":visible");
+            $btn.attr("aria-pressed", on ? "true" : "false");
+            // Keep button text stable; we only toggle stars on/off via class.
+            $btn.text("change the background color");
+        }
+
+        $btn.on("click", function () {
+            // Ensure star animation stays visible.
+            $("body.page1").removeClass("stars-off");
+            // Use jQuery .toggle() (show/hide the overlay).
+            $pinkOverlay.toggle();
+            syncToggleUI();
+        });
+
+        // Ensure star layer is visible when arriving on page2.
+        $("body.page1").removeClass("stars-off");
+        // Start with the dark blue background; overlay hidden.
+        $pinkOverlay.hide();
+        syncToggleUI();
+    }
 });
