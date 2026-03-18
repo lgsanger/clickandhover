@@ -35,12 +35,17 @@ $(document).ready(function(){
 
     // Randomly tile the provided star image across page 1.
     if ($("body.page1").length) {
+        // If we're on page4.html, we want reduced opacity and no fade animation.
+        var pathname = (window.location && window.location.pathname) ? window.location.pathname : "";
+        var isPage4 = pathname.indexOf("page4.html") !== -1;
+
         // page1.html lives in `sub-pages/`, so assets are one level up from the URL.
         // (Using the CSS-relative path here would fail because JS-relative paths resolve from the HTML page URL.)
         var STAR_TILE_URL = "../assets/star-tile.png";
         var TILE_PROBABILITY = 0.65; // how full the page feels
         var BASE_TILE_SIZE = 140; // px (will be scaled a bit per tile)
         var fadeTimer = null;
+        var PAGE4_OPACITY_MULT = 0.28;
 
         function clearPage1Tiles($layer) {
             $layer.find(".page1-tile").remove();
@@ -121,23 +126,26 @@ $(document).ready(function(){
                             height: size + "px",
                             backgroundImage: "url(" + STAR_TILE_URL + ")",
                             transform: "rotate(" + rot + "deg)",
-                            opacity: 0
+                            // On page4, skip fade-in and start at reduced opacity.
+                            opacity: isPage4 ? (opacityBase * PAGE4_OPACITY_MULT) : 0
                         })
                         .appendTo($layer);
                 }
             }
 
-            // Fade tiles in initially so you get a subtle "twinkle" as they appear.
-            $layer.find(".page1-tile").each(function () {
-                var $t = $(this);
-                var baseOpacity = parseFloat($t.data("baseOpacity")) || 0.8;
-                var delay = Math.random() * 650;
-                var dur = 420 + Math.random() * 420;
-                $t.css({ opacity: 0 });
-                $t.delay(delay).fadeTo(dur, baseOpacity);
-            });
+            if (!isPage4) {
+                // Fade tiles in initially so you get a subtle "twinkle" as they appear.
+                $layer.find(".page1-tile").each(function () {
+                    var $t = $(this);
+                    var baseOpacity = parseFloat($t.data("baseOpacity")) || 0.8;
+                    var delay = Math.random() * 650;
+                    var dur = 420 + Math.random() * 420;
+                    $t.css({ opacity: 0 });
+                    $t.delay(delay).fadeTo(dur, baseOpacity);
+                });
 
-            startRandomFades($layer);
+                startRandomFades($layer);
+            }
         }
 
         // Initial render + re-render on resize.
