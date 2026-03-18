@@ -51,6 +51,9 @@ body {
     display: inline-block;
     width: 180px;
     height: 230px;
+    position: relative;
+    top: 0;
+    left: 0;
     padding: 0;
     min-width: 0;
     border: none;
