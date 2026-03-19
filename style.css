@@ -128,7 +128,17 @@ body.page1 {
 body.page1.page3 {
     overflow-y: auto;
     overflow-x: hidden;
-    min-height: 280vh;
+    min-height: 450vh;
+}
+
+/* On page3, let the star layer extend with the scrollable page */
+body.page1.page3 .page1-tile-layer {
+    position: absolute;
+    inset: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 body.page1 h1,
@@ -205,6 +215,35 @@ body.page1.stars-off #page1-tile-layer {
     pointer-events: none;
 }
 
+/* Pink star: CSS tint + kept visible */
+.page1-tile--pink {
+    filter: hue-rotate(320deg) saturate(6) brightness(1.15);
+}
+
+/* Page 3 instruction text */
+body.page1.page3 #page3-instruction {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    left: auto;
+    transform: none;
+    z-index: 2;
+    color: #ffffff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: normal;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    cursor: default;
+    pointer-events: none;
+    display: inline-block;
+    width: fit-content;
+    white-space: nowrap;
+}
+
 /* Stars toggle button (used on page2.html) */
 .stars-toggle {
     position: fixed;
@@ -239,3 +278,5 @@ body.page1.stars-off #page1-tile-layer {
     height: auto;
     pointer-events: none;
 }
+
+/* (page4 button styling override removed intentionally) */

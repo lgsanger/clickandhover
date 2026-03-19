@@ -70,6 +70,9 @@ $(document).ready(function(){
                     var idx = Math.floor(Math.random() * $tiles.length);
                     var $t = $tiles.eq(idx);
 
+                    // On page3, keep the single pink star visible.
+                    if (isPage3 && $t.hasClass("page1-tile--pink")) continue;
+
                     var baseOpacity = parseFloat($t.data("baseOpacity")) || 0.8;
                     var currentOpacity = parseFloat($t.css("opacity")) || 0;
 
@@ -98,7 +101,9 @@ $(document).ready(function(){
             clearPage1Tiles($layer);
 
             var width = window.innerWidth;
-            var height = window.innerHeight;
+            // For page3, extend stars across the scrollable height so the odd star
+            // requires scrolling further to spot.
+            var height = isPage3 ? Math.max($body.height(), window.innerHeight) : window.innerHeight;
 
             // Add a small margin so edges still get filled after rotation.
             var pad = BASE_TILE_SIZE;
@@ -135,6 +140,26 @@ $(document).ready(function(){
                 }
             }
 
+            // On page3, tint exactly one star pink so the user can search for it.
+            if (isPage3) {
+                var $allTiles = $layer.find(".page1-tile");
+                if ($allTiles.length) {
+                    var thresholdY = height * 0.65;
+                    var $candidates = $allTiles.filter(function () {
+                        var topVal = parseFloat($(this).css("top")) || 0;
+                        return topVal > thresholdY;
+                    });
+
+                    var $pinkTile = ($candidates.length ? $candidates : $allTiles)
+                        .eq(Math.floor(Math.random() * ($candidates.length ? $candidates.length : $allTiles.length)));
+
+                    $pinkTile.addClass("page1-tile--pink");
+                    $pinkTile.css({ filter: "hue-rotate(320deg) saturate(7) brightness(1.2)" });
+                    // Make it stand out a bit even with fading.
+                    $pinkTile.data("baseOpacity", 0.95);
+                }
+            }
+
             if (!isPage4) {
                 // Fade tiles in initially so you get a subtle "twinkle" as they appear.
                 $layer.find(".page1-tile").each(function () {
@@ -156,17 +181,17 @@ $(document).ready(function(){
             renderPage1Tiles();
         });
 
-            // Page 3: parallax shift using jQuery scroll event.
+            // Page 3: keep using a jQuery scroll handler, but only a tiny x shift
+            // so the odd star stays primarily dependent on scrolling.
             if (isPage3 && !scrollAttached) {
                 scrollAttached = true;
-                $(window).scroll(function () {
+                $body.on("scroll.page3Parallax", function () {
                     var $layerRef = $("#page1-tile-layer");
                     if (!$layerRef.length) return;
 
-                    var y = $(window).scrollTop();
-                    var translateY = -y * 0.12;
-                    var translateX = Math.sin(y / 140) * 6;
-                    $layerRef.css("transform", "translate(" + translateX + "px, " + translateY + "px)");
+                    var y = $body.scrollTop() || 0;
+                    var translateX = Math.sin(y / 160) * 4;
+                    $layerRef.css("transform", "translate(" + translateX + "px, 0px)");
                 });
             }
     }
