@@ -217,7 +217,8 @@ body.page1.stars-off #page1-tile-layer {
 
 /* Pink star: CSS tint + kept visible */
 .page1-tile--pink {
-    filter: hue-rotate(320deg) saturate(6) brightness(1.15);
+    /* keep it above other tiles */
+    z-index: 5;
 }
 
 /* Page 3 instruction text */

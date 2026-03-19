@@ -43,6 +43,7 @@ $(document).ready(function(){
         // page1.html lives in `sub-pages/`, so assets are one level up from the URL.
         // (Using the CSS-relative path here would fail because JS-relative paths resolve from the HTML page URL.)
         var STAR_TILE_URL = "../assets/star-tile.png";
+        var PINK_STAR_TILE_URL = "../assets/pink-star-tile.png";
         var TILE_PROBABILITY = 0.65; // how full the page feels
         var BASE_TILE_SIZE = 140; // px (will be scaled a bit per tile)
         var fadeTimer = null;
@@ -154,9 +155,12 @@ $(document).ready(function(){
                         .eq(Math.floor(Math.random() * ($candidates.length ? $candidates.length : $allTiles.length)));
 
                     $pinkTile.addClass("page1-tile--pink");
-                    $pinkTile.css({ filter: "hue-rotate(320deg) saturate(7) brightness(1.2)" });
+                    // Use a real pink tile image so it always looks pink.
+                    $pinkTile.css({ backgroundImage: "url(" + PINK_STAR_TILE_URL + ")" });
                     // Make it stand out a bit even with fading.
                     $pinkTile.data("baseOpacity", 0.95);
+                    // Ensure it is immediately visible (avoid any race with fade-in).
+                    $pinkTile.css({ opacity: 1 });
                 }
             }
 
@@ -165,6 +169,13 @@ $(document).ready(function(){
                 $layer.find(".page1-tile").each(function () {
                     var $t = $(this);
                     var baseOpacity = parseFloat($t.data("baseOpacity")) || 0.8;
+
+                    // Keep the odd pink star always visible.
+                    if ($t.hasClass("page1-tile--pink")) {
+                        $t.css({ opacity: baseOpacity });
+                        return;
+                    }
+
                     var delay = Math.random() * 650;
                     var dur = 420 + Math.random() * 420;
                     $t.css({ opacity: 0 });
