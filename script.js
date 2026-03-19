@@ -197,4 +197,50 @@ $(document).ready(function(){
         $pinkOverlay.hide();
         syncToggleUI();
     }
+
+    // Page4: add-star feature
+    if ($("body.page4").length) {
+        var $btnAddStars = $("#add-stars");
+        var $extraLayer = $("#page4-extra-stars");
+        var ADD_STAR_URL = "../assets/star-tile.png";
+        var MAX_ADDED_STARS = 28;
+
+        function addOneStar() {
+            if (!$extraLayer.length) return;
+
+            var vw = $(window).width();
+            var vh = $(window).height();
+
+            var size = Math.floor(48 + Math.random() * 120); // 48..168
+            var left = Math.floor(Math.random() * (vw - size));
+            var top = Math.floor(Math.random() * (vh - size));
+            var rot = -25 + Math.random() * 50; // -25..25
+            var opacity = 0.65 + Math.random() * 0.35;
+
+            var $img = $("<img/>", {
+                src: ADD_STAR_URL,
+                alt: "Star"
+            });
+
+            $img.css({
+                left: left + "px",
+                top: top + "px",
+                width: size + "px",
+                transform: "rotate(" + rot + "deg)",
+                opacity: opacity
+            });
+
+            $img.appendTo($extraLayer);
+
+            // Keep things under control.
+            var $children = $extraLayer.children("img");
+            if ($children.length > MAX_ADDED_STARS) {
+                $children.first().remove();
+            }
+        }
+
+        $btnAddStars.on("click", function () {
+            addOneStar();
+        });
+    }
 });

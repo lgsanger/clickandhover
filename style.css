@@ -184,7 +184,7 @@ body.page1.pink-bg a {
     overflow: hidden;
 }
 
-body.page1 > :not(#page1-tile-layer):not(#pink-bg-overlay) {
+body.page1 > :not(#page1-tile-layer):not(#pink-bg-overlay):not(#page4-extra-stars) {
     position: relative;
     z-index: 1;
 }
@@ -222,4 +222,20 @@ body.page1.stars-off #page1-tile-layer {
 
 .stars-toggle:hover {
     background: rgba(0, 0, 0, 0.4);
+}
+
+/* Page 4: add-star feature */
+.page4-extra-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.page4-extra-stars img {
+    position: absolute;
+    width: 120px;
+    height: auto;
+    pointer-events: none;
 }
