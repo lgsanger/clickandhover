@@ -37,6 +37,7 @@ $(document).ready(function(){
     if ($("body.page1").length) {
         // If we're on page4.html, we want reduced opacity and no fade animation.
         var pathname = (window.location && window.location.pathname) ? window.location.pathname : "";
+        var isPage3 = pathname.indexOf("page3.html") !== -1;
         var isPage4 = pathname.indexOf("page4.html") !== -1;
 
         // page1.html lives in `sub-pages/`, so assets are one level up from the URL.
@@ -46,6 +47,7 @@ $(document).ready(function(){
         var BASE_TILE_SIZE = 140; // px (will be scaled a bit per tile)
         var fadeTimer = null;
         var PAGE4_OPACITY_MULT = 0.28;
+        var scrollAttached = false;
 
         function clearPage1Tiles($layer) {
             $layer.find(".page1-tile").remove();
@@ -153,6 +155,20 @@ $(document).ready(function(){
         $(window).on("resize.page1Tiles", function () {
             renderPage1Tiles();
         });
+
+            // Page 3: parallax shift using jQuery scroll event.
+            if (isPage3 && !scrollAttached) {
+                scrollAttached = true;
+                $(window).scroll(function () {
+                    var $layerRef = $("#page1-tile-layer");
+                    if (!$layerRef.length) return;
+
+                    var y = $(window).scrollTop();
+                    var translateY = -y * 0.12;
+                    var translateX = Math.sin(y / 140) * 6;
+                    $layerRef.css("transform", "translate(" + translateX + "px, " + translateY + "px)");
+                });
+            }
     }
 
     // Page2: change only the background color (stars should keep animating).

@@ -124,6 +124,13 @@ body.page1 {
     z-index: 0;
 }
 
+/* Page 3: allow scrolling so we can react to scroll events */
+body.page1.page3 {
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 280vh;
+}
+
 body.page1 h1,
 body.page1 p,
 body.page1 a {
